@@ -1,18 +1,32 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { PlayerStats, BossStats, TaskList, AddTaskForm, BattleArena, BattleSetup, SkillsPanel, ErrorBoundary } from '@/components'
+import { PlayerStats, BossStats, TaskList, AddTaskForm, BattleArena, BattleSetup, SkillsPanel, ErrorBoundary, HowToPlayModal } from '@/components'
 import { Swords } from 'lucide-react'
 import { useGameStore } from '@/store/useGameStore'
 import type { Task } from '@/types'
 
 function GameContent() {
   const [selectedTask, setSelectedTask] = useState<Task | null>(null)
+  const [isHowToOpen, setIsHowToOpen] = useState(false)
   const { battle, endBattle, checkDailyBoss } = useGameStore()
 
   useEffect(() => {
     checkDailyBoss()
   }, [checkDailyBoss])
+
+
+  useEffect(() => {
+    const hasSeenHowTo = localStorage.getItem('hasSeenHowToModal')
+    if (!hasSeenHowTo) {
+      setIsHowToOpen(true)
+    }
+  }, [])
+
+  const handleCloseHowTo = () => {
+    localStorage.setItem('hasSeenHowToModal', 'true')
+    setIsHowToOpen(false)
+  }
 
   const handleBattle = (task: Task) => {
     setSelectedTask(task)
@@ -58,6 +72,8 @@ function GameContent() {
           </main>
         </div>
       </div>
+
+      <HowToPlayModal isOpen={isHowToOpen} onClose={handleCloseHowTo} />
 
       {selectedTask && (
         <BattleSetup task={selectedTask} onClose={handleCloseSetup} />

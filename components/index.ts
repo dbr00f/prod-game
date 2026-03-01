@@ -6,3 +6,5 @@ export { BattleArena } from './BattleArena'
 export { BattleSetup } from './BattleSetup'
 export { SkillsPanel } from './SkillsPanel'
 export { ErrorBoundary } from './ErrorBoundary'
+
+export { HowToPlayModal } from './HowToPlayModal'
